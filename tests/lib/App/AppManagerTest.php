@@ -19,6 +19,7 @@ use OCP\ICache;
 use OCP\ICacheFactory;
 use OCP\IGroup;
 use OCP\IGroupManager;
+use OCP\ILogger;
 use OCP\IUser;
 use OCP\IUserSession;
 use OCP\IAppConfig;
@@ -90,6 +91,9 @@ class AppManagerTest extends TestCase {
 	/** @var EventDispatcherInterface|\PHPUnit_Framework_MockObject_MockObject */
 	protected $eventDispatcher;
 
+	/** @var ILogger|\PHPUnit_Framework_MockObject_MockObject */
+	protected $logger;
+
 	/** @var IAppManager */
 	protected $manager;
 
@@ -102,11 +106,12 @@ class AppManagerTest extends TestCase {
 		$this->cacheFactory = $this->createMock(ICacheFactory::class);
 		$this->cache = $this->createMock(ICache::class);
 		$this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+		$this->logger = $this->createMock(ILogger::class);
 		$this->cacheFactory->expects($this->any())
 			->method('createDistributed')
 			->with('settings')
 			->willReturn($this->cache);
-		$this->manager = new AppManager($this->userSession, $this->appConfig, $this->groupManager, $this->cacheFactory, $this->eventDispatcher);
+		$this->manager = new AppManager($this->userSession, $this->appConfig, $this->groupManager, $this->cacheFactory, $this->eventDispatcher, $this->logger);
 	}
 
 	protected function expectClearCache() {
